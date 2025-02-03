@@ -8,7 +8,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 import java.time.LocalDateTime;
 
 @Getter
-@Setter
+//@Setter
 @ToString
 @EqualsAndHashCode
 @NoArgsConstructor
@@ -21,30 +21,24 @@ public class Product {
 
     // PK 설정
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment 옵션(ID 순차 지정)
-
-    // GenerationType.IDENTITY → MYSQL, MariaDB
-    // GenerationType.SEQUNCE → ORACLE
-
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // auto_increment
     @Column(name = "prod_id")
     private Long id;
 
-    @Column(name = "prod_name", nullable = false, length = 30)
+    @Column(name = "prod_nm", nullable = false, length = 30)
     private String name; // 상품명
 
     @Column(name = "prod_price", nullable = true)
     private int price; // 상품 가격
 
-    @CreationTimestamp // INSERT 시 자동으로 시간 저장
-    @Column(updatable = false)// 수정 불가
+    @CreationTimestamp   // INSERT시 자동으로 시간 저장
+    @Column(updatable = false) // 수정 불가
     private LocalDateTime createdAt; // 상품 등록 시간
 
-    @UpdateTimestamp // UPDATE문 실행 시 자동으로 시간 수정
-
+    @UpdateTimestamp   // UPDATE문 실행 시 자동으로 시간 수정
     private LocalDateTime updatedAt; // 상품 정보 수정 시간
 
-    // 열거형 데이터를 따로 설정하지 않으면 숫자로 저장됨
-    // ★★★ 외우자 @Enumerated(EnumType.STRING) 숫자 → String으로 변환해야함
+    // 열거형 데이터는 따로 설정을 안하면 숫자로 저장됨
     @Enumerated(EnumType.STRING)
     private Category category; // 상품 카테고리
 
@@ -52,5 +46,11 @@ public class Product {
         FOOD, FASHION, ELECTRONIC
     }
 
-//    private String category;
+    // 수정 편의 메서드
+    public void changeProduct(String newName, int newPrice, Category newCategory) {
+        this.name = newName;
+        this.price = newPrice;
+        this.category = newCategory;
+    }
+
 }
